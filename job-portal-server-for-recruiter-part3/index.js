@@ -31,6 +31,7 @@ app.options("*", cors());
 // Logger
 const logger = (req, res, next) => {
   console.log("logger");
+
   next();
 };
 
@@ -46,6 +47,7 @@ const verifyToken = (req, res, next) => {
     if (err) {
       return res.status(403).json({ message: "Unauthorized Access" });
     }
+    req.user = decoded;
     next();
   });
 };
@@ -89,16 +91,6 @@ async function run() {
     });
 
     // ? jwt  er token
-    // app.post("/jwt", async (req, res) => {
-    //   const user = req.body;
-    //   const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "1h" });
-    //   res.cookie("token", token, {
-    //     httpOnly: true,
-    //     secure: false,
-    //   });
-
-    //   res.send({ success: true });
-    // });
 
     app.post("/jwt", (req, res) => {
       const user = req.body;
