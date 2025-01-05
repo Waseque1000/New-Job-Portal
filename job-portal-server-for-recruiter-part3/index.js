@@ -36,7 +36,7 @@ const logger = (req, res, next) => {
 
 // verify token
 const verifyToken = (req, res, next) => {
-  console.log("cookis ", req.cookies);
+  // console.log("cookis ", req.cookies);
   const token = req?.cookies?.token;
   if (!token) {
     return res.status(401).json({ message: "Unauthorized Access" });
@@ -111,6 +111,15 @@ async function run() {
         .send({ success: true });
     });
 
+    // ! When logout then remove the token
+    app.post("/logout", (req, res) => {
+      res.clearCookie("token", {
+        httpOnly: true,
+        secure: false,
+      });
+      res.send({ success: true });
+    });
+
     app.get("/jobs/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -130,6 +139,12 @@ async function run() {
       const email = req.query.email;
       const query = { applicant_email: email };
       // console.log("cookies: ", req.cookies);
+
+      // ! token er sathe email check
+      if (req.user?.email !== req.query.email) {
+        return res.status(403).send({ message: "forbidden Access" });
+      }
+
       const result = await jobApplicationCollection.find(query).toArray();
 
       // fokira way to aggregate data

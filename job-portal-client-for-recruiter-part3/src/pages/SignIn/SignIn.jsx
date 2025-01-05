@@ -22,19 +22,20 @@ const SignIn = () => {
     // console.log(email, password);
     singInUser(email, password)
       .then((result) => {
-        // console.log("sign in", result.user);
+        console.log("sign in", result.user);
         // navigate(from);
         // ! TODO: jwt and axios
         const user = { email: email };
-        axios
-          .post(
-            "http://localhost:5000/jwt",
-            { email },
-            { withCredentials: true }
-          )
-          .then((response) => {
-            console.log("Token received:", response.data);
-          });
+        // axios
+        //   .post(
+        //     "http://localhost:5000/jwt",
+        //     { email },
+        //     { withCredentials: true }
+        //   )
+        // .then((response) => {
+        //   console.log("Token received:", response.data);
+        // }
+        // );
       })
       .catch((error) => {
         console.log(error);
